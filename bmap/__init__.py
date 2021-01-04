@@ -1,9 +1,12 @@
 from collections import OrderedDict
 
 __all__ = ('BoundSizedDict',)
-__version__ = '0.2'
+__version__ = '0.3'
 
 class BoundSizedDict(OrderedDict):
+    """Dictionary restricted in growth, FIFO.
+       Updating values via a key prolongs live of the key-value pair."""
+
     def __new__(cls, max):
         if isinstance(max, int) and max >= 1:
             return super().__new__(cls)
@@ -25,9 +28,9 @@ class BoundSizedDict(OrderedDict):
     def __repr__(self):
         return str(self)
 
-    @classmethod
-    def fromkeys(cls, keys):
-        raise DeprecationWarning('nondetermenistic behaviour will be achieved using this method')
+    def fromkeys(self, keys, value=None):
+        for key in keys:
+            self[key] = value
 
     def update(self, dict):
         raise DeprecationWarning('nondetermenistic behaviour will be achieved using this method')

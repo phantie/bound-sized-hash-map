@@ -1,12 +1,13 @@
 # bound-sized-hash-map
-Dictionary restricted in growth, FIFO
+Dictionary restricted in growth, FIFO. Updating values via a key prolongs live of the key-value pair.
 
 ```python
 (take(BoundSizedDict(2))(print)
     .__setitem__('a', 20)(print)
     .__setitem__('b', 30)(print)
-    .__setitem__('c', 40)(print)
-    .__setitem__('d', 50)(print))
+    .__setitem__('a', 40)(print)
+    .__setitem__('c', 50)(print)
+    .__setitem__('d', 60)(print))
 ```
 
 Output:
@@ -14,8 +15,9 @@ Output:
     {}
     {'a': 20}
     {'a': 20, 'b': 30}
-    {'b': 30, 'c': 40}
-    {'c': 40, 'd': 50}
+    {'b': 30, 'a': 40}
+    {'a': 40, 'c': 50}
+    {'c': 50, 'd': 60}
 
 Import:
 
