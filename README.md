@@ -12,8 +12,8 @@ Dictionary restricted in growth, FIFO. Updating values via a key prolongs live o
 
 Output:
 
-    {} ←
-    {'a': 20} ←
+      {} ←
+      {'a': 20} ←
     ← {'a': 20 ← 'b': 30} ←
     ← {'b': 30 ← 'a': 40} ←
     ← {'a': 40 ← 'c': 50} ←
