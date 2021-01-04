@@ -1,29 +1,34 @@
 from collections import OrderedDict
 
 __all__ = ('BoundSizedDict',)
-__version__ = '0.3'
+__version__ = '0.4'
 
 class BoundSizedDict(OrderedDict):
     """Dictionary restricted in growth, FIFO.
        Updating values via a key prolongs live of the key-value pair."""
 
-    def __new__(cls, max):
-        if isinstance(max, int) and max >= 1:
-            return super().__new__(cls)
-        else:
-            raise ValueError('max must be an instance of int and >= 1')
+    def __init__(self, max_size):
+        self.max_size = max_size
 
-    def __init__(self, max):        
-        self.max = max
+    @property
+    def max_size(self):
+        return self._max_size
+
+    @max_size.setter
+    def max_size(self, value):
+        if isinstance(value, int) and value >= 1:
+            self._max_size = value
+        else:
+            raise ValueError('max_size must be an instance of int and >= 1')
 
     def __setitem__(self, key, value):
         super().__setitem__(key, value)
         self.move_to_end(key)
-        if len(self) > self.max:
+        if len(self) > self.max_size:
             self.popitem(last=False)
 
     def __str__(self):
-        return '{' + ', '.join(f'{k!r}: {v!r}' for k, v in self.items()) + '}'
+        return f"{' ← ' if len(self) == self.max_size else '   '}\x7B{' ← '.join(f'{k!r}: {v!r}' for k, v in self.items())}\x7D ← "
 
     def __repr__(self):
         return str(self)
@@ -33,4 +38,4 @@ class BoundSizedDict(OrderedDict):
             self[key] = value
 
     def update(self, dict):
-        raise DeprecationWarning('nondetermenistic behaviour will be achieved using this method')
+        raise DeprecationWarning('nondetermenistic behaviour\'s achieved using this method')
