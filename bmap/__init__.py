@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 __all__ = ('BoundSizedDict',)
-__version__ = '0.4'
+__version__ = '1.0'
 
 class BoundSizedDict(OrderedDict):
     """Dictionary restricted in growth, FIFO.
@@ -35,7 +35,7 @@ class BoundSizedDict(OrderedDict):
         return f"{' ← ' if len(self) == self.max_size else '   '}\x7B{' ← '.join(f'{k!r}: {v!r}' for k, v in self.items())}\x7D ← "
 
     def __repr__(self):
-        return str(self)
+        return f'{self.__class__.__name__}({self.max_size})'
 
     def popfirst(self):
         return self.popitem(last=False)
